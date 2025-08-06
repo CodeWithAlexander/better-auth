@@ -598,7 +598,6 @@ export const getOrgAdapter = <O extends OrganizationOptions>(
 			});
 			return team;
 		},
-
 		deleteTeam: async (teamId: string) => {
 			const team = await adapter.delete<Team>({
 				model: "team",
