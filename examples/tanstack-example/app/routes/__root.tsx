@@ -49,7 +49,6 @@ function RootComponent() {
 	const [theme, setTheme] = useState<"light" | "dark">("light");
 	const { data, isPending, error } = useSession();
 	const { navigate } = useRouter();
-	console.log();
 
 	useEffect(() => {
 		if (!data?.user) {

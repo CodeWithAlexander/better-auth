@@ -12,7 +12,8 @@
 			"recommended": false,
 			"suspicious": {
 				"noImplicitAnyLet": "warn",
-				"noDuplicateObjectKeys": "warn"
+				"noDuplicateObjectKeys": "warn",
+				"noConsoleLog": "warn"
 			},
 			"performance": {
 				"noDelete": "error"
