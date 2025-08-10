@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { getConfig } from "../utils/get-config";
-import { z } from "zod";
+import * as z from "zod/v4";
 import { existsSync } from "fs";
 import path from "path";
 import { logger } from "better-auth";
@@ -19,6 +19,7 @@ export async function generateAction(opts: any) {
 			output: z.string().optional(),
 			schemaFile: z.string().optional(),
 			y: z.boolean().optional(),
+			yes: z.boolean().optional(),
 		})
 		.parse(opts);
 
@@ -58,7 +59,7 @@ export async function generateAction(opts: any) {
 		process.exit(0);
 	}
 	if (schema.append || schema.overwrite) {
-		let confirm = options.y;
+		let confirm = options.y || options.yes;
 		if (!confirm) {
 			const response = await prompts({
 				type: "confirm",
@@ -96,7 +97,12 @@ export async function generateAction(opts: any) {
 		}
 	}
 
-	let confirm = options.y;
+	if (options.y) {
+		console.warn("WARNING: --y is deprecated. Consider -y or --yes");
+		options.yes = true;
+	}
+
+	let confirm = options.yes;
 
 	if (!confirm) {
 		const response = await prompts({
@@ -142,5 +148,6 @@ export const generate = new Command("generate")
 	)
 	.option("--output <output>", "the file to output to the generated schema")
 	.option("--schema-file <path>", "Path to your prisma schema file.")
-	.option("-y, --y", "automatically answer yes to all prompts", false)
+	.option("-y, --yes", "automatically answer yes to all prompts", false)
+	.option("--y", "(deprecated) same as --yes", false)
 	.action(generateAction);
